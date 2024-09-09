@@ -7,6 +7,8 @@
 # include "errno.h"
 # include "math.h"
 
+# include "./minilibx/mlx.h"
+
 # define screen_h 480
 # define screen_w 640
 # define texture_w 64
@@ -17,8 +19,19 @@
 
 # define MSG1 "Error: t_cub3d malloc error!"
 
+typedef struct s_textures
+{
+	void	*wall;
+}				t_textures;
+
 typedef struct s_cub3d
 {
+	void	*mlx_ptr;
+	void	*mlx_window;
+	void	*textures[1];
+	char	*texture_data[1];
+	int		screen[screen_h][screen_w];
+
 	char	**map;
 	double	posx;//x coordinate of player's start position
 	double	posy;//y coordinate of player's start position
@@ -73,6 +86,8 @@ typedef struct s_cub3d
 	int		hit;
 	int		side;
 	int		done;
+
+	t_textures	texture_data;
 }				t_cub3d;
 
 

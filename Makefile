@@ -1,6 +1,9 @@
 NAME 		= cub3D
 CC 			= gcc
 CFLAGS 		= -Wall -Wextra -Werror -finline-functions -fvectorize -fslp-vectorize -ffast-math -falign-functions -funroll-loops -fstrict-aliasing -fomit-frame-pointer -flto -Ofast -O1 -O2 -Os -O3 
+MLXFLAGS	= -L ./minilibx -lmlx -framework OpenGl -framework Appkit
+MLX_PATH	= ./minilibx
+
 
 R			= \033[1;31m
 B		= \033[1;34m
@@ -12,9 +15,7 @@ O		= \033[38;2;255;165;0m
 
 SRC			= cub3d.c	\
 			  raycast.c	\
-			  
-
-			  
+			  mlx_init.c \
 
 
 OBJ = $(SRC:.c=.o)
@@ -22,13 +23,17 @@ OBJ = $(SRC:.c=.o)
 all: cute ${NAME}
 
 ${NAME}: $(OBJ)
-		@$(CC) $(CFLAGS) -lm $(SRC) -o $(NAME)
+		@(MAKE) --mo-print-directory -C $(MLX_PATH)
+		$(G)MINILIBX COMPILED!$(RS)
+		@$(CC) $(CFLAGS) -lm $(SRC) $(MLXFLAGS) -o $(NAME)
+		$(G)CUB3D CREATED!$(RS)
 
 %.o: %.c
 	@${CC} ${CFLAGS} ${THREAD_FLG} -c $< -o $@
 
 clean:
 		@rm -rf $(OBJ)
+		$(MAKE) clean -C ./minilibx
 		@echo "OBJECT FILES $(R)DELETED$(RS)"
 
 fclean: clean

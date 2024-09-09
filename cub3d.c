@@ -1,7 +1,8 @@
 #include "cub3d.h"
 
-void	ft_error_str(char *str)
+void	ft_error_str(char *str, int x)//don't forget to change it so it can receive and int (ERRNO)
 {
+	errno = x;
 	perror(str);
 	exit(ERROR);
 }
@@ -13,8 +14,7 @@ int main(void)
 	cub3d = malloc(sizeof(t_cub3d));
 	if (!cub3d)
 	{
-		errno = 12;
-		ft_error_str("Error t_cub3d");
+		ft_error_str("Error t_cub3d", 12);
 		return (ERROR);
 	}
 	// init everything!

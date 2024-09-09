@@ -115,8 +115,11 @@ void	ft_playerpos_int(t_cub3d *cub3d)
 int	ft_raycast(t_cub3d *cub3d)
 {
 	int		x;
+	char	*tex;
 	int		texture_vertical;
+	int		code;
 	double	step;
+	int		color;
 	double	camerax; /*normalizes camera plane to numbers between 1 and -1>
 					   right side being -1, center 0 and left side 1. 
 					   This will ease the ray vector calculation!*/
@@ -131,12 +134,17 @@ int	ft_raycast(t_cub3d *cub3d)
 			ft_playerpos_int(cub3d);
 			ft_distance(cub3d);
 			step = ft_digital_differential_analysis(cub3d);
+			code = cub3d->map[cub3d->mapx][cub3d->mapy] - 1;
 			while (cub3d->lower_point < cub3d->upper_point)
 			{
 				texture_vertical = (int)cub3d->texture_position & (texture_h - 1);//& operator (bitwise AND) is used because its faster than modulus
 				cub3d->texture_position = step + cub3d->texture_position;
-				uint32_t tex = texture[code][texture_h * texture_vertical + cub3d->texture_fix];
-				screen[cub3d->lower_point][x] = tex;
+				tex = cub3d->texture_data[code][texture_h * texture_vertical + cub3d->texture_fix];
+				//cub3d->screen[cub3d->lower_point][x] = tex;
+				color = *(unsigned int *)tex;
+				if (cub3d->side == 1)
+					color = (color >> 1) & 0x7F7F7F;
+				mlx_pixel_put(cub3d->mlx_ptr, cub3d->mlx_window, x, cub3d->lower_point, color);
 				cub3d->lower_point++;
 			}
 			x++;
