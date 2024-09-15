@@ -7,44 +7,154 @@ void	ft_error_str(char *str, int x)//don't forget to change it so it can receive
 	exit(ERROR);
 }
 
-int main(void)
+int	check_dot_cub(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	i -= 4;
+	if (i <= 0)
+		return (1);
+	if (!ft_strncmp(str + i, ".cub", 4))
+		return (0);
+	else
+		return (1);
+}
+
+void	init_cub(t_cub3d *cub3d, t_pars *pars)
+{
+	int	i;
+
+	i = 0;
+	cub3d->map = pars->map;
+	cub3d->posx = pars->posx;
+	cub3d->posy = pars->posy;
+	while (i <= 2)
+	{
+		cub3d->c_rgb[i] = pars->c_rgb[i];
+		cub3d->f_rgb[i] = pars->f_rgb[i];
+		i++;
+	}
+	cub3d->path_n = pars->path_n;
+	cub3d->path_s = pars->path_s;
+	cub3d->path_e = pars->path_e;
+	cub3d->path_w = pars->path_w;
+	if (pars->orientation == 'N')
+	{
+		cub3d->dirx = 0;
+		cub3d->diry = -1;
+		cub3d->planex = 0.66;
+		cub3d->planey = 0;
+	}
+	if (pars->orientation == 'S')
+	{
+		cub3d->dirx = 0;
+		cub3d->diry = 1;
+		cub3d->planex = 0.66;
+		cub3d->planey = 0;
+	}
+	if (pars->orientation == 'E')
+	{
+		cub3d->dirx = 1;
+		cub3d->diry = 0;
+		cub3d->planex = 0;
+		cub3d->planey = 0.66;
+	}
+	if (pars->orientation == 'N')
+	{
+		cub3d->dirx = -1;
+		cub3d->diry = 0;
+		cub3d->planex = 0;
+		cub3d->planey = 0.66;
+	}
+}
+
+// int	key_press(int keysym, t_cub3d *cub3d)
+// {
+// 	if (keysym == W)
+// 		data->rc->move_f = 1;
+// 	if (keysym == S)
+// 		data->rc->move_b = 1;
+// 	if (keysym == L_ARR)
+// 		data->rc->rot_l = 1;
+// 	if (keysym == R_ARR)
+// 		data->rc->rot_r = 1;
+// 	if (keysym == A)
+// 		data->rc->move_l = 1;
+// 	if (keysym == D)
+// 		data->rc->move_r = 1;
+// 	if (keysym == TAB)
+// 		data->rc->mouse = 1;
+// 	if (keysym == SPACE)
+// 		data->rc->shoot = 1;
+// 	if (keysym == ESC)
+// 		free_all(data, NULL, 0);
+// 	return (0);
+// }
+
+// int	cross_escape(t_cub3d *cub3d)
+// {
+// 	//free_all(cub3d, NULL, 0);
+// 	return (0);
+// }
+
+int main(int ac, char **av)
 {
 	t_cub3d	*cub3d;
+	t_pars	pars;
+	int i;
 
+	if (ac != 2)
+		msg_exit("Wrong input!");
+	if (check_dot_cub(av[1]))
+		msg_exit("Wrong file format.");
 	cub3d = malloc(sizeof(t_cub3d));
 	if (!cub3d)
 	{
 		ft_error_str("Error t_cub3d", 12);
 		return (ERROR);
 	}
+	i = 0;
+	while (++i < 4)
+		cub3d->texture[i].text = NULL;
 	// init everything!
-	cub3d->posx = 10;
-	cub3d->posy = 12;
-	cub3d->dirx = -1;
-	cub3d->diry = 0;
-	cub3d->planex = 0;
-	cub3d->planey = 0.66;
-	cub3d->done = 0;
-	cub3d->wall_dist = 0;
-	cub3d->lower_point = 0;
-	cub3d->upper_point = 0;
-	cub3d->raydirx = 0;
-	cub3d->raydiry = 0;
-	cub3d->mapx = 0;
-	cub3d->mapy = 0;
-	cub3d->deltax = 0;
-	cub3d->deltay = 0;
-	cub3d->sidex = 0;
-	cub3d->sidey = 0;
-	cub3d->hit_location = 0;
-	cub3d->texture_fix = 0;
-	cub3d->column_height = 0;
-	cub3d->stepx = 0;
-	cub3d->camera_height = 100;
-	cub3d->texture_position = 0;
-	cub3d->stepy = 0;
-	cub3d->hit = 0;
-	cub3d->side = 0;
+	parsing(&pars, av);
+	init_cub(cub3d, &pars);
+	ft_init_window(cub3d);
 	ft_raycast(cub3d);
+	mlx_hook(cub3d->mlx_window, 2, 1L << 0, &key_press, cub3d);
+	// cub3d->posx = 10; //player position
+	// cub3d->posy = 12;
+
+	// cub3d->dirx = -1; // orientation
+	// cub3d->diry = 0; // exemple : W
+
+	// cub3d->planex = 0; // N, S : x0.66 y0
+	// cub3d->planey = 0.66; // W, E : x0 y0.66
+
+	// cub3d->done = 0;
+	// cub3d->wall_dist = 0;
+	// cub3d->lower_point = 0;
+	// cub3d->upper_point = 0;
+	// cub3d->raydirx = 0;
+	// cub3d->raydiry = 0;
+	// cub3d->mapx = 0;
+	// cub3d->mapy = 0;
+	// cub3d->deltax = 0;
+	// cub3d->deltay = 0;
+	// cub3d->sidex = 0;
+	// cub3d->sidey = 0;
+	// cub3d->hit_location = 0;
+	// cub3d->texture_fix = 0;
+	// cub3d->column_height = 0;
+	// cub3d->stepx = 0;
+	// cub3d->camera_height = 100;
+	// cub3d->texture_position = 0;
+	// cub3d->stepy = 0;
+	// cub3d->hit = 0;
+	// cub3d->side = 0;
+	// ft_raycast(cub3d);
 	free(cub3d);
 }
