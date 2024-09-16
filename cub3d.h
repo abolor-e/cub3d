@@ -11,8 +11,8 @@
 
 # include "./minilibx/mlx.h"
 
-# define screen_h 480
-# define screen_w 640
+# define screen_h 1080
+# define screen_w 1920
 # define texture_w 64
 # define texture_h 64
 
@@ -39,11 +39,11 @@ typedef struct s_cub3d
 {
 	void	*mlx_ptr;
 	void	*mlx_window;
-	void	*textures[2];
+	//void	*textures[2];
 	void	*ptr;
 	t_textures	*text;
 	t_textures	texture[4];
-	int		screen[screen_h][screen_w];
+	//int		screen[screen_h][screen_w];
 
 	char	**map;
 	double	posx;//x coordinate of player's start position
@@ -78,7 +78,7 @@ typedef struct s_cub3d
 	double	deltay;
 	/*These are the distance the ray travels to 
 	   traverse 1 unit of each axis*/
-
+	double	step;
 	double	sidex;
 	double	sidey;
 	/*These are the distance to reach the first vertical
@@ -103,8 +103,8 @@ typedef struct s_cub3d
 	int		texture_vertical;
 
 	//t_textures	texture_data;
-	int		c_rgb[3];
-	int		f_rgb[3];
+	int		c_rgb;
+	int		f_rgb;
 	char	*path_n;
 	char	*path_s;
 	char	*path_e;

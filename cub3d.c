@@ -23,6 +23,16 @@ int	check_dot_cub(char *str)
 		return (1);
 }
 
+void	convert_rgb_hex_floor(t_cub3d *cub3d, t_pars *pars, int option)
+{
+	if (option == 1)
+		cub3d->f_rgb = (1 << 24 | pars->f_rgb[0] << 16
+				| pars->f_rgb[1] << 8 | pars->f_rgb[2]);		
+	else
+		cub3d->c_rgb = (1 << 24 | pars->c_rgb[0] << 16
+			| pars->c_rgb[1] << 8 | pars->c_rgb[2]);
+}
+
 void	init_cub(t_cub3d *cub3d, t_pars *pars)
 {
 	int	i;
@@ -31,12 +41,8 @@ void	init_cub(t_cub3d *cub3d, t_pars *pars)
 	cub3d->map = pars->map;
 	cub3d->posx = pars->posx;
 	cub3d->posy = pars->posy;
-	while (i <= 2)
-	{
-		cub3d->c_rgb[i] = pars->c_rgb[i];
-		cub3d->f_rgb[i] = pars->f_rgb[i];
-		i++;
-	}
+	convert_rgb_hex_floor(cub3d, pars, 0);
+	convert_rgb_hex_floor(cub3d, pars, 1);
 	cub3d->path_n = pars->path_n;
 	cub3d->path_s = pars->path_s;
 	cub3d->path_e = pars->path_e;
@@ -62,7 +68,7 @@ void	init_cub(t_cub3d *cub3d, t_pars *pars)
 		cub3d->planex = 0;
 		cub3d->planey = 0.66;
 	}
-	if (pars->orientation == 'N')
+	if (pars->orientation == 'W')
 	{
 		cub3d->dirx = -1;
 		cub3d->diry = 0;
@@ -116,15 +122,36 @@ int main(int ac, char **av)
 		ft_error_str("Error t_cub3d", 12);
 		return (ERROR);
 	}
-	i = 0;
+	i = -1;
 	while (++i < 4)
 		cub3d->texture[i].text = NULL;
 	// init everything!
 	parsing(&pars, av);
 	init_cub(cub3d, &pars);
+	cub3d->done = 0;
+	cub3d->wall_dist = 0;
+	cub3d->lower_point = 0;
+	cub3d->upper_point = 0;
+	cub3d->raydirx = 0;
+	cub3d->raydiry = 0;
+	cub3d->mapx = 0;
+	cub3d->mapy = 0;
+	cub3d->deltax = 0;
+	cub3d->deltay = 0;
+	cub3d->sidex = 0;
+	cub3d->sidey = 0;
+	cub3d->hit_location = 0;
+	cub3d->texture_fix = 0;
+	cub3d->column_height = 0;
+	cub3d->stepx = 0;
+	cub3d->camera_height = 100;
+	cub3d->texture_position = 0;
+	cub3d->stepy = 0;
+	cub3d->hit = 0;
+	cub3d->side = 0;
 	ft_init_window(cub3d);
 	ft_raycast(cub3d);
-	mlx_hook(cub3d->mlx_window, 2, 1L << 0, &key_press, cub3d);
+	mlx_loop(cub3d->mlx_ptr);
 	// cub3d->posx = 10; //player position
 	// cub3d->posy = 12;
 
@@ -134,27 +161,4 @@ int main(int ac, char **av)
 	// cub3d->planex = 0; // N, S : x0.66 y0
 	// cub3d->planey = 0.66; // W, E : x0 y0.66
 
-	// cub3d->done = 0;
-	// cub3d->wall_dist = 0;
-	// cub3d->lower_point = 0;
-	// cub3d->upper_point = 0;
-	// cub3d->raydirx = 0;
-	// cub3d->raydiry = 0;
-	// cub3d->mapx = 0;
-	// cub3d->mapy = 0;
-	// cub3d->deltax = 0;
-	// cub3d->deltay = 0;
-	// cub3d->sidex = 0;
-	// cub3d->sidey = 0;
-	// cub3d->hit_location = 0;
-	// cub3d->texture_fix = 0;
-	// cub3d->column_height = 0;
-	// cub3d->stepx = 0;
-	// cub3d->camera_height = 100;
-	// cub3d->texture_position = 0;
-	// cub3d->stepy = 0;
-	// cub3d->hit = 0;
-	// cub3d->side = 0;
-	// ft_raycast(cub3d);
-	free(cub3d);
 }

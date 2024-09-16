@@ -116,11 +116,8 @@ void	check_missing_info(t_pars *pars, char **file_content)
 			if (file_content[i][j] == 'N' || file_content[i][j] == 'S' || file_content[i][j] == 'E' || file_content[i][j] == 'W')
 			{
 				pars->orientation = file_content[i][j];
-				if (file_content[i][j] == 'N')
-				{
-					pars->posx = j;
-					pars->posy = i;
-				}
+				pars->posx = j;
+				pars->posy = i;
 			}
 		}
 	}
@@ -139,10 +136,24 @@ void	parsing(t_pars *pars, char **av)
 	fd = open(av[1], O_RDWR, 677);
 	if (fd == -1)
 		msg_exit("File doesn't exist.");
-	file_content = malloc(sizeof(char **) * 9999999);
-	buff = malloc(sizeof(char **) * 9999999999);
+	buff = malloc(sizeof(char *) * 9999999999);
 	while ((buff[i] = get_next_line(fd)))
 		i++;
+	i = 0;
+	j = 0;
+	while (buff[i])
+	{
+		if ((buff[i][0] >= 9 && buff[i][0] <= 13))
+			i++;
+		else
+		{
+			i++;
+			j++;
+		}
+	}
+	file_content = malloc(sizeof(char *) * (j + 1));
+	if (!file_content)
+		msg_exit("Cannot allocate.");
 	i = 0;
 	j = 0;
 	while (buff[i])
@@ -156,7 +167,8 @@ void	parsing(t_pars *pars, char **av)
 			i++;
 		}
 	}
-	init_pars(pars);
+	file_content[j] = NULL;
+ 	init_pars(pars);
 	parse_texture(pars, file_content);
 	printf("n : %s\ns : %s\nw : %s\ne : %s\n", pars->path_n, pars->path_s, pars->path_e, pars->path_w);
 	parse_cf_rgb(pars, file_content);
