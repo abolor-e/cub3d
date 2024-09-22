@@ -1,5 +1,57 @@
 #include "cub3d.h"
 
+
+void	free_tab(char **tab)
+{
+	int	i;
+
+	i = -1;
+	while (tab[++i])
+		free(tab[i]);
+}
+
+void	free_cub(t_cub3d *cub3d)
+{
+	if (cub3d->map)
+		free_tab(cub3d->map);
+	if (cub3d->path_n)
+		free(cub3d->path_n);
+	if (cub3d->path_s)
+		free(cub3d->path_s);
+	if (cub3d->path_e)
+		free(cub3d->path_e);
+	if (cub3d->path_w)
+		free(cub3d->path_w);
+	free(cub3d);
+}
+
+void	free_pars(t_pars *pars)
+{
+	if (pars->map)
+	{
+		free_tab(pars->map);
+		free(pars->map);
+	}
+	if (pars->path_n)
+		free(pars->path_n);
+	if (pars->path_s)
+		free(pars->path_s);
+	if (pars->path_e)
+		free(pars->path_e);
+	if (pars->path_w)
+		free(pars->path_w);
+}
+
+int	close_free(t_cub3d *cub3d)
+{
+	mlx_destroy_image(cub3d->mlx_ptr, cub3d->text->text);
+	mlx_destroy_window(cub3d->mlx_ptr, cub3d->mlx_window);
+	free(cub3d->mlx_ptr);
+	free_cub(cub3d);
+	exit(EXIT_SUCCESS);
+	return (0);
+}
+
 void	ft_error_str(char *str, int x)//don't forget to change it so it can receive and int (ERRNO)
 {
 	errno = x;
@@ -149,9 +201,18 @@ int main(int ac, char **av)
 	cub3d->stepy = 0;
 	cub3d->hit = 0;
 	cub3d->side = 0;
+
+	cub3d->ch_posx = cub3d->posx;
+	cub3d->ch_posy = cub3d->posy;
+
 	ft_init_window(cub3d);
 	ft_raycast(cub3d);
+	mlx_hook(cub3d->mlx_window, keypress, keypressmask, &ft_keypress, cub3d);
+	mlx_hook(cub3d->mlx_window, keyrelease, keyreleasemask, &ft_keyrelease, cub3d);
+	mlx_hook(cub3d->mlx_window, 17, 0, close_free, cub3d);
+	mlx_loop_hook(cub3d->mlx_ptr, &ft_render_next_frame_bymove, cub3d);
 	mlx_loop(cub3d->mlx_ptr);
+
 	// cub3d->posx = 10; //player position
 	// cub3d->posy = 12;
 

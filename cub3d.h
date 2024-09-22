@@ -4,6 +4,7 @@
 # include "stdlib.h"
 # include "limits.h"
 # include "stdlib.h"
+# include "sys/time.h"
 # include "errno.h"
 # include "math.h"
 # include <fcntl.h>
@@ -11,14 +12,31 @@
 
 # include "./minilibx/mlx.h"
 
-# define screen_h 1080
-# define screen_w 1920
-# define texture_w 64
-# define texture_h 64
+# define screen_h 		1080
+# define screen_w 		1920
+# define texture_w		64
+# define texture_h 		64
 
-# define ERROR -1
-# define SUCCESS 0
+# define ERROR 			-1
+# define SUCCESS 		0
 
+# define KEY_D			2
+# define KEY_S			1
+# define KEY_A			0
+# define KEY_W			13
+# define KEY_ESC		53
+# define ARROW_L		123
+# define ARROW_R		124
+
+//MLX events
+# define keypress		2
+# define keyrelease		3
+
+//MLX masks
+# define keypressmask	1L<<0
+# define keyreleasemask	1L<<1
+
+//Error messages
 # define MSG1 "Error: t_cub3d malloc error!"
 
 // typedef struct s_textures
@@ -35,17 +53,38 @@ typedef struct s_textures
 	char	*address;
 }				t_textures;
 
+typedef struct  s_time
+{
+	double	prev;
+	double	pres;
+	double	frame;
+}				t_time;
+
+typedef struct s_keypress
+{
+	int	forward;
+	int	backwards;
+	int	left;
+	int	right;
+	int	rot_l;
+	int	rot_r;
+}				t_keypress;
+
 typedef struct s_cub3d
 {
 	void	*mlx_ptr;
 	void	*mlx_window;
-	//void	*textures[2];
 	void	*ptr;
 	t_textures	*text;
 	t_textures	texture[4];
-	//int		screen[screen_h][screen_w];
+	t_keypress	keyp;
+	t_time		time;
 
 	char	**map;
+
+	double	ch_posx;//changed positions
+	double	ch_posy;
+
 	double	posx;//x coordinate of player's start position
 	double	posy;//y coordinate of player's start position
 
@@ -135,11 +174,14 @@ char	**ft_split(char const *str, char const c);
 int		ft_atoi(const char *str);
 void	msg_exit(char *error);
 void	parsing(t_pars *pars, char **av);
-
+void	free_cub(t_cub3d *cub3d);
+void	free_tab(char **tab);
+void	free_pars(t_pars *pars);
+int		close_free(t_cub3d *cub3d);
 void	ft_init_window(t_cub3d *cub3d);
-
-
 void	my_mlx_pixel_put(t_textures *text, int x, int y, int color);
-void	draw_cross(t_cub3d *cub3d);
+int		ft_keypress(int	keycode, t_cub3d *cub3d);
+int		ft_keyrelease(int keycode, t_cub3d *cub3d);
+int		ft_render_next_frame_bymove(t_cub3d *cub3d);
 
 #endif

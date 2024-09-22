@@ -1,7 +1,7 @@
 NO ./textures/1.xpm
-F 30,30,200
+F 0,0,0
 EA ./textures/2.xpm
-C 22,189,30
+C 128,128,128
 SO ./textures/3.xpm
 WE ./textures/4.xpm
 

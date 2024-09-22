@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olmarech <olmarech@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abolor-e <abolor-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 15:30:03 by olmarech          #+#    #+#             */
-/*   Updated: 2024/03/01 19:31:42 by olmarech         ###   ########.fr       */
+/*   Updated: 2024/09/20 14:10:58 by abolor-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,19 +112,3 @@ char	**ft_split(char const *str, char const c)
 	}
 	return (result);
 }
-/*
-#include <stdio.h>
-int	main(int argc, char **argv)
-{
-	int		index;
-	char	**split;
-	(void)	argc;
-	split = ft_split(argv[1], argv[2]);
-	index = 0;
-	while (split[index])
-	{
-		printf("%s\n", split[index]);
-		index++;
-	}
-}
-*/

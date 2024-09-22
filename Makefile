@@ -22,6 +22,7 @@ SRC			= cub3d.c	\
 			  parsing/utils.c	\
 			  parsing/GNL/get_next_line.c	\
 			  parsing/GNL/get_next_line_utils.c	\
+			  hook.c
 
 
 OBJ = $(SRC:.c=.o)
@@ -44,7 +45,7 @@ clean:
 
 fclean: clean
 		@rm -rf $(NAME) $(OBJ)
-		@echo "PHILO $(R)DELETED$(RS)"
+		@echo "CUB3D $(R)DELETED$(RS)"
 
 re: fclean all
 

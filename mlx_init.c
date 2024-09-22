@@ -1,15 +1,5 @@
 #include "cub3d.h"
 
-// void	ft_to_image(t_cub3d *cub3d, void **image, char *location)
-// {
-// 	int width;
-// 	int height;
-
-// 	*image = mlx_xpm_file_to_image(cub3d->mlx_ptr, location, &width, &height);
-// 	if (!(*image))
-// 		ft_error_str("Error image creation", 11);
-// }
-
 void	ft_init_sprite(t_cub3d *cub3d)
 {
 	int width;
@@ -19,12 +9,6 @@ void	ft_init_sprite(t_cub3d *cub3d)
 	cub3d->texture[1].text = mlx_xpm_file_to_image(cub3d->mlx_ptr, cub3d->path_s, &width, &height);
 	cub3d->texture[2].text = mlx_xpm_file_to_image(cub3d->mlx_ptr, cub3d->path_w, &width, &height);
 	cub3d->texture[3].text = mlx_xpm_file_to_image(cub3d->mlx_ptr, cub3d->path_e, &width, &height);
-
-
-	// ft_to_image(cub3d, &cub3d->texture[0].text, "textures/greystone_resized.xpm");
-	// ft_to_image(cub3d, &cub3d->texture[1].text, "textures/greystone_resized.xpm");
-	// ft_to_image(cub3d, &cub3d->texture[2].text, "textures/greystone_resized.xpm");
-	// ft_to_image(cub3d, &cub3d->texture[3].text, "textures/greystone_resized.xpm");
 }
 
 void	ft_get_address(t_cub3d *cub3d)

@@ -20,7 +20,6 @@ void	ft_sidedist(t_cub3d *cub3d)
 			cub3d->sidey = cub3d->sidey + cub3d->deltay;
 			cub3d->mapy = cub3d->mapy + cub3d->stepy;//To move the grid to the block where the ray hit
 		}
-		// printf("mapx: %d, mapy: %d, sidex: %f, sidey: %f, hit: %d, side: %d, deltax: %f, deltay: %f\n", cub3d->mapx, cub3d->mapy, cub3d->sidex, cub3d->sidey, cub3d->hit, cub3d->side, cub3d->deltax, cub3d->deltay);
 		if (cub3d->map[cub3d->mapy][cub3d->mapx] == '1')
 			cub3d->hit = 1;
 	}
@@ -32,8 +31,6 @@ void	ft_fill_heightpixel(t_cub3d *cub3d)
 	if (cub3d->lower_point < 0)
 		cub3d->lower_point = 0;
 	cub3d->upper_point = cub3d->column_height / 2 + screen_h / 2;
-	printf("upper_point : %d\n", cub3d->upper_point);
-	printf("column height : %d\n", cub3d->column_height);
 	if (cub3d->upper_point >= screen_h)
 		cub3d->upper_point = screen_h - 1;
 }
@@ -64,9 +61,6 @@ void	ft_column_height(t_cub3d *cub3d)
 		cub3d->wall_dist = cub3d->sidex - cub3d->deltax;
 	else
 		cub3d->wall_dist = cub3d->sidey - cub3d->deltay;
-	printf("sidey : %f, deltay : %f\n", cub3d->sidey, cub3d->deltay);
-	printf("sidex : %f, deltax : %f\n", cub3d->sidex, cub3d->deltax);
-	printf("wall_dist : %f\n", cub3d->wall_dist);
 	cub3d->column_height = (int)(screen_h / cub3d->wall_dist);/*if wall distance is far away 
 	(high number) column height is low*/
 }
@@ -118,8 +112,6 @@ void	ft_distance(t_cub3d *cub3d)
 		cub3d->stepy = 1;
 		cub3d->sidey = (cub3d->mapy + 1.0 - cub3d->posy) * cub3d->deltay;
 	}
-	// printf("mapx: %d, mapy: %d, sidex: %f, sidey: %f, hit: %d, side: %d, deltax: %f, deltay: %f\n",
-    //    cub3d->mapx, cub3d->mapy, cub3d->sidex, cub3d->sidey, cub3d->hit, cub3d->side, cub3d->deltax, cub3d->deltay);
 }
 
 void	ft_playerpos_int(t_cub3d *cub3d)
@@ -197,8 +189,6 @@ void	ft_draw_text(t_cub3d *cub3d, int x)
 		cub3d->lower_point++;
 	}
 	i = cub3d->upper_point;
-	//printf("upper_point : %d\n", cub3d->upper_point);
-	// printf("x : %d, i : %d\n", x, i);
 	while (++i < screen_h)
 		my_mlx_pixel_put(cub3d->text, x, i, cub3d->f_rgb);
 }
