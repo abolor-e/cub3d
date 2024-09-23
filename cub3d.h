@@ -12,8 +12,8 @@
 
 # include "./minilibx/mlx.h"
 
-# define screen_h 		1080
-# define screen_w 		1920
+# define screen_h 		720
+# define screen_w 		1080
 # define texture_w		64
 # define texture_h 		64
 
@@ -78,7 +78,7 @@ typedef struct s_cub3d
 	void	*mlx_window;
 	void	*ptr;
 	t_textures	*text;
-	t_textures	*begin_image;
+	void		*round;
 	t_textures	texture[4];
 	t_keypress	keyp;
 	t_time		time;

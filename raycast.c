@@ -186,9 +186,9 @@ void	ft_gun_point_sideways(t_cub3d *cub3d)
 	int	i;
 
 	i = 0;
-	x = screen_w / 2 - 10;
-	z = screen_w / 2 + 10;
-	while (++i < 11)
+	x = screen_w / 2 - 8;
+	z = screen_w / 2 + 8;
+	while (++i < 9)
 	{
 		my_mlx_pixel_put(cub3d->text, x, screen_h / 2, 0x39FF14);
 		my_mlx_pixel_put(cub3d->text, z, screen_h / 2, 0x39FF14);
@@ -204,9 +204,9 @@ void	ft_gun_point(t_cub3d *cub3d)
 	int	i;
 
 	i = 0;
-	x = screen_h / 2 - 10;
-	z = screen_h / 2 + 10;
-	while (++i < 11)
+	x = screen_h / 2 - 8;
+	z = screen_h / 2 + 8;
+	while (++i < 9)
 	{
 		my_mlx_pixel_put(cub3d->text, screen_w / 2, x, 0x39FF14);
 		my_mlx_pixel_put(cub3d->text, screen_w / 2, z, 0x39FF14);
@@ -214,6 +214,66 @@ void	ft_gun_point(t_cub3d *cub3d)
 		z++;
 	}
 	ft_gun_point_sideways(cub3d);
+}
+
+// void	ft_minimap(t_cub3d *cub3d)
+// {
+// 	int width;
+// 	int height;
+
+// 	cub3d->round = mlx_xpm_file_to_image(cub3d->mlx_ptr, "textures/round.xpm", &width, &height);
+// 	if (!cub3d->round)
+//     {
+//         ft_error_str("Failed to load minimap image", 13);
+//         return;
+//     }
+// 	// cub3d->begin_image->address = mlx_get_data_addr(&cub3d->begin_image->text, &cub3d->begin_image->bits_per_pixel, &cub3d->begin_image->line_length,&cub3d->begin_image->endian);
+// 	mlx_put_image_to_window(cub3d->mlx_ptr, cub3d->mlx_window, cub3d->round, 0, 0);
+// }
+
+void	ft_draw_circle(t_cub3d *cub3d, int x0, int y0, int radius, int color)
+{
+    int x;
+	int	y;
+	int	d;
+	double	disty;
+	double	distx;
+
+	disty = cub3d->posy - 4.5;
+	distx = cub3d->posx - 4.5;
+    x = 0;
+    y = radius;
+    d = 3 - 2 * radius;
+	my_mlx_pixel_put(cub3d->text, x0 + 1, y0, 0x000080);
+	my_mlx_pixel_put(cub3d->text, x0 - 1, y0, 0x000080);
+	my_mlx_pixel_put(cub3d->text, x0, y0, 0x000080);
+	my_mlx_pixel_put(cub3d->text, x0, y0 + 1, 0x000080);
+	my_mlx_pixel_put(cub3d->text, x0, y0 - 1, 0x000080);
+    while (x++ <= y)
+    {
+        my_mlx_pixel_put(cub3d->text, x0 + x, y0 + y, color);
+        my_mlx_pixel_put(cub3d->text, x0 + y, y0 + x, color);
+        my_mlx_pixel_put(cub3d->text, x0 - x, y0 + y, color);
+        my_mlx_pixel_put(cub3d->text, x0 - y, y0 + x, color);
+        my_mlx_pixel_put(cub3d->text, x0 + x, y0 - y, color);
+        my_mlx_pixel_put(cub3d->text, x0 + y, y0 - x, color);
+        my_mlx_pixel_put(cub3d->text, x0 - x, y0 - y, color);
+        my_mlx_pixel_put(cub3d->text, x0 - y, y0 - x, color);
+
+        if (d < 0)
+            d += 4 * x + 6;
+        else
+        {
+            d += 4 * (x - y) + 10;
+            y--;
+        }
+    }
+}
+
+void	ft_minimap(t_cub3d *cub3d)
+{
+	ft_draw_circle(cub3d, 120, 120, 90, 0x000000);
+	// ft_inside_circle(cub3d);
 }
 
 void	ft_raycast(t_cub3d *cub3d)
@@ -242,5 +302,6 @@ void	ft_raycast(t_cub3d *cub3d)
 	}
 	//gun image
 	ft_gun_point(cub3d);
+	ft_minimap(cub3d);
 	mlx_put_image_to_window(cub3d->mlx_ptr, cub3d->mlx_window, cub3d->text->text, 0, 0);
 }
