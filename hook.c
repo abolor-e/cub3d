@@ -16,11 +16,16 @@ int	ft_keypress(int	keycode, t_cub3d *cub3d)
 		cub3d->keyp.rot_l = 1;
 	else if (keycode == ARROW_R)
 		cub3d->keyp.rot_r = 1;
+	else if (keycode == MOUSE)
+		cub3d->keyp.mouse = 1;
 	return (0);
 }
 
 int	ft_keyrelease(int keycode, t_cub3d *cub3d)
 {
+	int	i;
+
+	i = 0;
 	if (keycode == KEY_A)
 		cub3d->keyp.left = 0;
 	else if (keycode == KEY_D)
@@ -35,6 +40,8 @@ int	ft_keyrelease(int keycode, t_cub3d *cub3d)
 		cub3d->keyp.rot_l = 0;
 	else if (keycode == ARROW_R)
 		cub3d->keyp.rot_r = 0;
+	else if (keycode == MOUSE)
+		cub3d->keyp.mouse = 0;
 	return (0);
 }
 /*----------------------------------------------------------*/
@@ -57,13 +64,16 @@ void	ft_movement_change(t_cub3d *cub3d)
 		cub3d->posx = cub3d->ch_posx;
 }
 
-void	ft_rot_movement(t_cub3d *cub3d, int i)
+void	ft_rot_movement(t_cub3d *cub3d, int i, double x)
 {
 	double	rot_sp;
 	double	prev_dirx;
 	double	prev_cpx;
-
-	rot_sp = cub3d->time.frame * 3;
+	
+	if (x == 0)
+		rot_sp = cub3d->time.frame * 3;
+	else if (i == 0)
+		rot_sp = x;
 	if (i == ARROW_L)
 		rot_sp = -rot_sp;
 	prev_dirx = cub3d->dirx;
@@ -110,9 +120,9 @@ void	ft_move_check(t_cub3d *cub3d)
 	else if (cub3d->keyp.backwards == 1)
 		ft_movement(cub3d, KEY_S);
 	else if (cub3d->keyp.rot_l == 1)
-		ft_rot_movement(cub3d, ARROW_L);
+		ft_rot_movement(cub3d, ARROW_L, 0);
 	else if (cub3d->keyp.rot_r == 1)
-		ft_rot_movement(cub3d, ARROW_R);
+		ft_rot_movement(cub3d, ARROW_R, 0);
 }
 
 int	ft_render_next_frame_bymove(t_cub3d *cub3d)
@@ -125,6 +135,7 @@ int	ft_render_next_frame_bymove(t_cub3d *cub3d)
 	cub3d->time.frame = (cub3d->time.pres - cub3d->time.prev) / 1000;
 	ft_move_check(cub3d);
 	mlx_destroy_image(cub3d->mlx_ptr, cub3d->text->text);
+	ft_mouse(cub3d);
 	ft_raycast(cub3d);
 	return (0);
 }

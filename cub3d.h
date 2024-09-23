@@ -27,6 +27,7 @@
 # define KEY_ESC		53
 # define ARROW_L		123
 # define ARROW_R		124
+# define MOUSE			46
 
 //MLX events
 # define keypress		2
@@ -68,6 +69,7 @@ typedef struct s_keypress
 	int	right;
 	int	rot_l;
 	int	rot_r;
+	int	mouse;
 }				t_keypress;
 
 typedef struct s_cub3d
@@ -76,6 +78,7 @@ typedef struct s_cub3d
 	void	*mlx_window;
 	void	*ptr;
 	t_textures	*text;
+	t_textures	*begin_image;
 	t_textures	texture[4];
 	t_keypress	keyp;
 	t_time		time;
@@ -98,9 +101,9 @@ typedef struct s_cub3d
 	double	planex;//camera plane
 	double	planey;
 	/*if N: planex = 0.66; planey = 0; meaning the camera plane is positioned through the x-axis
-	     S: planex = 0.66; planey = 0;
+	     S: planex = -0.66; planey = 0;
 		 W: planex = 0; planey = 0.66; meaning the camera plane is positioned through the y-axis
-		 E: planex = 0; planey = 0.66;*/
+		 E: planex = 0; planey = -0.66;*/
 	
 	double	raydirx;
 	double	raydiry;
@@ -183,5 +186,7 @@ void	my_mlx_pixel_put(t_textures *text, int x, int y, int color);
 int		ft_keypress(int	keycode, t_cub3d *cub3d);
 int		ft_keyrelease(int keycode, t_cub3d *cub3d);
 int		ft_render_next_frame_bymove(t_cub3d *cub3d);
+void	ft_mouse(t_cub3d *cub3d);
+void	ft_rot_movement(t_cub3d *cub3d, int i, double x);
 
 #endif

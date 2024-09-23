@@ -40,7 +40,6 @@ void	ft_init_window(t_cub3d *cub3d)
 	// 	free(cub3d->mlx_ptr);
 	// 	ft_error_str("Error creating image", 11);
 	// }
-
 	if (!cub3d->mlx_window)
 	{
 		mlx_destroy_window(cub3d->mlx_ptr, cub3d->mlx_window);
@@ -49,5 +48,11 @@ void	ft_init_window(t_cub3d *cub3d)
 	}
 	ft_init_sprite(cub3d);
 	ft_get_address(cub3d);
+	// cub3d->begin_image->text = NULL;
+	// cub3d->begin_image->text = mlx_new_image(cub3d->mlx_ptr, screen_w, screen_h);
+	// if (!cub3d->text->text)
+	// 	ft_error_str("mlx_init begin_image->text mlx_new_image error", 12);
+	// cub3d->begin_image->address = mlx_get_data_addr(cub3d->begin_image->text, &cub3d->begin_image->bits_per_pixel, &cub3d->begin_image->line_length, &cub3d->begin_image->endian);
+	// mlx_put_image_to_window(cub3d->mlx_ptr, cub3d->mlx_window, cub3d->begin_image->text, 0, 0);
 	cub3d->text->text = NULL;
 }

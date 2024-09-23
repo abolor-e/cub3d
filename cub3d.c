@@ -47,6 +47,7 @@ int	close_free(t_cub3d *cub3d)
 	mlx_destroy_image(cub3d->mlx_ptr, cub3d->text->text);
 	mlx_destroy_window(cub3d->mlx_ptr, cub3d->mlx_window);
 	free(cub3d->mlx_ptr);
+	free(cub3d->text);
 	free_cub(cub3d);
 	exit(EXIT_SUCCESS);
 	return (0);
@@ -110,7 +111,7 @@ void	init_cub(t_cub3d *cub3d, t_pars *pars)
 	{
 		cub3d->dirx = 0;
 		cub3d->diry = 1;
-		cub3d->planex = 0.66;
+		cub3d->planex = -0.66;
 		cub3d->planey = 0;
 	}
 	if (pars->orientation == 'E')
@@ -125,38 +126,9 @@ void	init_cub(t_cub3d *cub3d, t_pars *pars)
 		cub3d->dirx = -1;
 		cub3d->diry = 0;
 		cub3d->planex = 0;
-		cub3d->planey = 0.66;
+		cub3d->planey = -0.66;
 	}
 }
-
-// int	key_press(int keysym, t_cub3d *cub3d)
-// {
-// 	if (keysym == W)
-// 		data->rc->move_f = 1;
-// 	if (keysym == S)
-// 		data->rc->move_b = 1;
-// 	if (keysym == L_ARR)
-// 		data->rc->rot_l = 1;
-// 	if (keysym == R_ARR)
-// 		data->rc->rot_r = 1;
-// 	if (keysym == A)
-// 		data->rc->move_l = 1;
-// 	if (keysym == D)
-// 		data->rc->move_r = 1;
-// 	if (keysym == TAB)
-// 		data->rc->mouse = 1;
-// 	if (keysym == SPACE)
-// 		data->rc->shoot = 1;
-// 	if (keysym == ESC)
-// 		free_all(data, NULL, 0);
-// 	return (0);
-// }
-
-// int	cross_escape(t_cub3d *cub3d)
-// {
-// 	//free_all(cub3d, NULL, 0);
-// 	return (0);
-// }
 
 int main(int ac, char **av)
 {
@@ -204,9 +176,10 @@ int main(int ac, char **av)
 
 	cub3d->ch_posx = cub3d->posx;
 	cub3d->ch_posy = cub3d->posy;
-
+	//ft_begin_image(cub3d);//Image to see first
 	ft_init_window(cub3d);
 	ft_raycast(cub3d);
+	mlx_mouse_move(cub3d->mlx_window, screen_w/2, screen_h/2);
 	mlx_hook(cub3d->mlx_window, keypress, keypressmask, &ft_keypress, cub3d);
 	mlx_hook(cub3d->mlx_window, keyrelease, keyreleasemask, &ft_keyrelease, cub3d);
 	mlx_hook(cub3d->mlx_window, 17, 0, close_free, cub3d);

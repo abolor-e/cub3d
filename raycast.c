@@ -6,17 +6,17 @@ void	ft_sidedist(t_cub3d *cub3d)
 	{
 		if (cub3d->sidex < cub3d->sidey)//This means if sidex is lower the ray will hit vertical grid
 		{
-			cub3d->side = 2;
+			cub3d->side = 3;
 			if (cub3d->raydirx < 0)
-				cub3d->side = 3;
+				cub3d->side = 2;
 			cub3d->sidex = cub3d->sidex + cub3d->deltax;//the next x coordinate to hit vertical grid
 			cub3d->mapx = cub3d->mapx + cub3d->stepx;
 		}
 		else
 		{
-			cub3d->side = 0;
+			cub3d->side = 1;
 			if (cub3d->raydiry < 0)
-				cub3d->side = 1;
+				cub3d->side = 0;
 			cub3d->sidey = cub3d->sidey + cub3d->deltay;
 			cub3d->mapy = cub3d->mapy + cub3d->stepy;//To move the grid to the block where the ray hit
 		}
@@ -49,7 +49,9 @@ void	ft_hit_location(t_cub3d *cub3d)
 void	ft_hit_loc_texturefix(t_cub3d *cub3d)
 {
 	cub3d->texture_fix = (int)(cub3d->hit_location * (double)texture_w);
-	if (cub3d->side == 3 || cub3d->side == 0)
+	if ((cub3d->side == 2 && cub3d->raydirx < 0) || (cub3d->side == 1 && cub3d->raydiry > 0))
+		cub3d->texture_fix = texture_w - cub3d->texture_fix - 1;
+	else if ((cub3d->side == 0 && cub3d->raydiry < 0) || (cub3d->side == 3 && cub3d->raydirx > 0))
 		cub3d->texture_fix = texture_w - cub3d->texture_fix - 1;
 	/*since the graph is reversed when certain rays hits the wall
 	  need to check if it hit from the right or left side or from top or down*/
@@ -153,22 +155,6 @@ uint32_t	ft_color_get(t_cub3d *cub3d)
 	return color;
 }
 
-
-void	draw_cross(t_cub3d *cub3d)
-{
-	int	x;
-	int	y;
-
-	x = screen_w / 2 - 11;
-	y = screen_h / 2 - 11;
-	// if (x < 0 || y < 0)
-		// free_all(cub3d, "Screen too small", 1);
-	while (++x <= screen_w / 2 + 10)
-		my_mlx_pixel_put(cub3d->text, x, screen_h / 2, 0x00FFFFFF);
-	while (++y <= screen_h / 2 + 10)
-		my_mlx_pixel_put(cub3d->text, screen_w / 2, y, 0x00FFFFFF);
-}
-
 void	ft_draw_text(t_cub3d *cub3d, int x)
 {
 	uint32_t	color;
@@ -191,6 +177,43 @@ void	ft_draw_text(t_cub3d *cub3d, int x)
 	i = cub3d->upper_point;
 	while (++i < screen_h)
 		my_mlx_pixel_put(cub3d->text, x, i, cub3d->f_rgb);
+}
+
+void	ft_gun_point_sideways(t_cub3d *cub3d)
+{
+	int	x;
+	int z;
+	int	i;
+
+	i = 0;
+	x = screen_w / 2 - 10;
+	z = screen_w / 2 + 10;
+	while (++i < 11)
+	{
+		my_mlx_pixel_put(cub3d->text, x, screen_h / 2, 0x39FF14);
+		my_mlx_pixel_put(cub3d->text, z, screen_h / 2, 0x39FF14);
+		x--;
+		z++;
+	}
+}
+
+void	ft_gun_point(t_cub3d *cub3d)
+{
+	int	x;
+	int z;
+	int	i;
+
+	i = 0;
+	x = screen_h / 2 - 10;
+	z = screen_h / 2 + 10;
+	while (++i < 11)
+	{
+		my_mlx_pixel_put(cub3d->text, screen_w / 2, x, 0x39FF14);
+		my_mlx_pixel_put(cub3d->text, screen_w / 2, z, 0x39FF14);
+		x--;
+		z++;
+	}
+	ft_gun_point_sideways(cub3d);
 }
 
 void	ft_raycast(t_cub3d *cub3d)
@@ -217,5 +240,7 @@ void	ft_raycast(t_cub3d *cub3d)
 		ft_digital_differential_analysis(cub3d);
 		ft_draw_text(cub3d, x);
 	}
+	//gun image
+	ft_gun_point(cub3d);
 	mlx_put_image_to_window(cub3d->mlx_ptr, cub3d->mlx_window, cub3d->text->text, 0, 0);
 }
