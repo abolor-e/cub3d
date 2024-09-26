@@ -6,6 +6,8 @@ void	free_tab(char **tab)
 	int	i;
 
 	i = -1;
+	if (!tab)
+		return ;
 	while (tab[++i])
 		free(tab[i]);
 }
@@ -28,10 +30,7 @@ void	free_cub(t_cub3d *cub3d)
 void	free_pars(t_pars *pars)
 {
 	if (pars->map)
-	{
 		free_tab(pars->map);
-		free(pars->map);
-	}
 	if (pars->path_n)
 		free(pars->path_n);
 	if (pars->path_s)
@@ -80,7 +79,7 @@ void	convert_rgb_hex_floor(t_cub3d *cub3d, t_pars *pars, int option)
 {
 	if (option == 1)
 		cub3d->f_rgb = (1 << 24 | pars->f_rgb[0] << 16
-				| pars->f_rgb[1] << 8 | pars->f_rgb[2]);		
+				| pars->f_rgb[1] << 8 | pars->f_rgb[2]);
 	else
 		cub3d->c_rgb = (1 << 24 | pars->c_rgb[0] << 16
 			| pars->c_rgb[1] << 8 | pars->c_rgb[2]);
@@ -88,12 +87,9 @@ void	convert_rgb_hex_floor(t_cub3d *cub3d, t_pars *pars, int option)
 
 void	init_cub(t_cub3d *cub3d, t_pars *pars)
 {
-	int	i;
-
-	i = 0;
 	cub3d->map = pars->map;
-	cub3d->posx = pars->posx;
-	cub3d->posy = pars->posy;
+	cub3d->posx = pars->posx + 0.5;
+	cub3d->posy = pars->posy + 0.5;
 	convert_rgb_hex_floor(cub3d, pars, 0);
 	convert_rgb_hex_floor(cub3d, pars, 1);
 	cub3d->path_n = pars->path_n;
@@ -180,6 +176,7 @@ int main(int ac, char **av)
 	ft_init_window(cub3d);
 	ft_raycast(cub3d);
 	mlx_mouse_move(cub3d->mlx_window, screen_w/2, screen_h/2);
+	mlx_hook(cub3d->mlx_window, 4, keypressmask, &ft_mousepress, cub3d);
 	mlx_hook(cub3d->mlx_window, keypress, keypressmask, &ft_keypress, cub3d);
 	mlx_hook(cub3d->mlx_window, keyrelease, keyreleasemask, &ft_keyrelease, cub3d);
 	mlx_hook(cub3d->mlx_window, 17, 0, close_free, cub3d);

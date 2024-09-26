@@ -4,11 +4,17 @@ void	ft_init_sprite(t_cub3d *cub3d)
 {
 	int width;
 	int height;
+	int	i;
 
+	i = -1;
 	cub3d->texture[0].text = mlx_xpm_file_to_image(cub3d->mlx_ptr, cub3d->path_n, &width, &height);
 	cub3d->texture[1].text = mlx_xpm_file_to_image(cub3d->mlx_ptr, cub3d->path_s, &width, &height);
 	cub3d->texture[2].text = mlx_xpm_file_to_image(cub3d->mlx_ptr, cub3d->path_w, &width, &height);
 	cub3d->texture[3].text = mlx_xpm_file_to_image(cub3d->mlx_ptr, cub3d->path_e, &width, &height);
+	cub3d->gun_text = mlx_xpm_file_to_image(cub3d->mlx_ptr, "textures/gun.xpm", &width, &height);
+	while (++i < 4)
+		if (!cub3d->texture[i].text)
+			msg_exit("Problem while opening texture files.");
 }
 
 void	ft_get_address(t_cub3d *cub3d)
@@ -27,7 +33,7 @@ void	ft_init_window(t_cub3d *cub3d)
 	cub3d->text = malloc(sizeof(t_textures));
 	if (!cub3d->text)
 		//free_function!
-	// if (!cub3d->mlx_ptr) Add protection for 
+	// if (!cub3d->mlx_ptr) Add protection for
 	// {
 	// 	free(cub3d->mlx_ptr);
 	// 	ft_error_str("Error mlx_ptr", 11);

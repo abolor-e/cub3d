@@ -1,6 +1,6 @@
 NAME 		= cub3D
 CC 			= gcc
-CFLAGS 		= -Wall -Wextra -Werror 
+CFLAGS 		= -Wall -Wextra -Werror
 MLXFLAGS	= -L./minilibx -I./minilibx -lmlx -framework OpenGl -framework Appkit
 MLX_PATH	= ./minilibx
 
@@ -20,6 +20,9 @@ SRC			= cub3d.c	\
 			  parsing/mainparsing.c	\
 			  parsing/ft_split.c	\
 			  parsing/utils.c	\
+			  parsing/utils2.c	\
+			  parsing/init_utils.c \
+			  parsing/init_utils2.c \
 			  parsing/GNL/get_next_line.c	\
 			  parsing/GNL/get_next_line_utils.c	\
 			  hook.c	\
@@ -71,7 +74,7 @@ cute:
 	@echo "       /<>|$(G)██████$(RS)|$(G)██████$(RS)|$(O)██████$(RS)|$(Y)██$(RS)|$(B)█$(RS) /<><><>╚$(R)██████████████$(RS)╝/ˉˉ$(B)████████████$(RS)═╝<><><><><><>/$(G)██$(RS)/"
 	@echo "      /<><|$(G)██████$(RS)|$(G)██████$(RS)|$(O)██████$(RS)|$(Y)█$(RS) / <><><><><><><><><><><><><><><><><><><><><><><><><><>/$(G)██$(RS)/                                     "
 	@echo "     /<><> --------------------/ <><><><><><><><><><><><><><><><><><><><><><><><><><><>/$(G)██$(RS)/                                  "
-	@echo "    /<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><></$(G)██$(RS)/               "                                                                        
+	@echo "    /<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><></$(G)██$(RS)/               "
 	@echo "    $(G)████████████████████████████████████████████████████████████████████████████████████$(RS)/  "
 	@echo "                                                                                   "
 	@echo "                                                            Made by : \033[1;91mabolor-e\033[m "

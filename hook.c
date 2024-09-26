@@ -18,14 +18,23 @@ int	ft_keypress(int	keycode, t_cub3d *cub3d)
 		cub3d->keyp.rot_r = 1;
 	else if (keycode == MOUSE)
 		cub3d->keyp.mouse = 1;
+	else if (keycode == LEFTCLICK)
+		cub3d->keyp.l_click = 1;
+	return (0);
+}
+
+int	ft_mousepress(int mousecode, int x, int y, t_cub3d *cub3d)
+{
+	(void)x;
+	(void)y;
+
+	if (mousecode == 1)
+		cub3d->keyp.l_click = 1;
 	return (0);
 }
 
 int	ft_keyrelease(int keycode, t_cub3d *cub3d)
 {
-	int	i;
-
-	i = 0;
 	if (keycode == KEY_A)
 		cub3d->keyp.left = 0;
 	else if (keycode == KEY_D)
@@ -69,7 +78,7 @@ void	ft_rot_movement(t_cub3d *cub3d, int i, double x)
 	double	rot_sp;
 	double	prev_dirx;
 	double	prev_cpx;
-	
+
 	if (x == 0)
 		rot_sp = cub3d->time.frame * 3;
 	else if (i == 0)
@@ -125,6 +134,26 @@ void	ft_move_check(t_cub3d *cub3d)
 		ft_rot_movement(cub3d, ARROW_R, 0);
 }
 
+int	ft_shoot(t_cub3d *cub3d)
+{
+	int	width;
+	int	height;
+
+	if (cub3d->keyp.l_click)
+	{
+		cub3d->gun_text = mlx_xpm_file_to_image(cub3d->mlx_ptr, "textures/gun_shoot1.xpm", &width, &height);
+		mlx_put_image_to_window(cub3d->mlx_ptr, cub3d->mlx_window, cub3d->gun_text, -30, 0);
+		cub3d->keyp.l_click = 0;
+	}
+	else
+	{
+		cub3d->gun_text = mlx_xpm_file_to_image(cub3d->mlx_ptr, "textures/gun_shoot3.xpm", &width, &height);
+		mlx_put_image_to_window(cub3d->mlx_ptr, cub3d->mlx_window, cub3d->gun_text, -30, 0);
+	}
+
+	return (0);
+}
+
 int	ft_render_next_frame_bymove(t_cub3d *cub3d)
 {
 	struct timeval	time;
@@ -136,6 +165,7 @@ int	ft_render_next_frame_bymove(t_cub3d *cub3d)
 	ft_move_check(cub3d);
 	mlx_destroy_image(cub3d->mlx_ptr, cub3d->text->text);
 	ft_mouse(cub3d);
+	ft_shoot(cub3d);
 	ft_raycast(cub3d);
 	return (0);
 }

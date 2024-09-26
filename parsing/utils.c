@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: olmarech <olmarech@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/26 12:39:46 by olmarech          #+#    #+#             */
+/*   Updated: 2024/09/26 13:15:16 by olmarech         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../cub3d.h"
 
 int	cmpchar(char chr1, char chr2)
@@ -71,4 +83,31 @@ int	ft_atoi(const char *str)
 		tmp = result;
 	}
 	return ((int)(result * sign));
+}
+
+void	check_map(char **map)
+{
+	int	i;
+	int	j;
+	int	player;
+
+	player = 0;
+	i = -1;
+	while (map[++i])
+	{
+		j = -1;
+		while (map[i][++j])
+		{
+			if (map[i][j] == '2')
+				msg_exit("The map is not playable.");
+			if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E'
+				|| map[i][j] == 'W')
+				player++;
+		}
+	}
+	if (player > 1)
+		msg_exit("It can be only 1 player.");
+	if (player < 1)
+		msg_exit("There is no player set on the map.");
+	write(0, "\033[0;32mSucced :\033[0m The map is playable!\n", 42);
 }

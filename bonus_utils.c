@@ -15,10 +15,29 @@ void	ft_mouse(t_cub3d *cub3d)
 	}
 }
 
-// void	ft_gun(cub3d)
-// {
+void	ft_gun(t_cub3d *cub3d)
+{
+	mlx_put_image_to_window(cub3d->mlx_ptr, cub3d->mlx_window, cub3d->gun_text, 0, 0);
+}
 
-// }
+int	ft_handle_mouse_move(int x, int y, t_cub3d *cub3d)
+{
+	int cx;
+	int	mov;
+
+	(void)y;
+	cx = screen_w / 2;
+	mov = x - cx;
+	//printf("mov : %d\n", mov);
+
+	// printf("pos mouse : %d, %d\n", z, i);
+	cub3d->angle += mov * MOUSE_S;
+	if (cub3d->angle < 0)
+		cub3d->angle += 2 * M_PI;
+	if (cub3d->angle >= 2 * M_PI)
+		cub3d->angle -= 2 * M_PI;
+	return (0);
+}
 
 /*
 - Minimap

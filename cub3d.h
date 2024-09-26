@@ -13,7 +13,7 @@
 # include "./minilibx/mlx.h"
 
 # define screen_h 		720
-# define screen_w 		1080
+# define screen_w 		1280
 # define texture_w		64
 # define texture_h 		64
 
@@ -28,6 +28,8 @@
 # define ARROW_L		123
 # define ARROW_R		124
 # define MOUSE			46
+# define LEFTCLICK		49
+# define MOUSE_S		0.0027
 
 //MLX events
 # define keypress		2
@@ -70,6 +72,7 @@ typedef struct s_keypress
 	int	rot_l;
 	int	rot_r;
 	int	mouse;
+	int	l_click;
 }				t_keypress;
 
 typedef struct s_cub3d
@@ -78,13 +81,13 @@ typedef struct s_cub3d
 	void	*mlx_window;
 	void	*ptr;
 	t_textures	*text;
-	void		*round;
+	t_textures	*begin_image;
 	t_textures	texture[4];
 	t_keypress	keyp;
 	t_time		time;
 
 	char	**map;
-
+	double	angle;
 	double	ch_posx;//changed positions
 	double	ch_posy;
 
@@ -104,10 +107,10 @@ typedef struct s_cub3d
 	     S: planex = -0.66; planey = 0;
 		 W: planex = 0; planey = 0.66; meaning the camera plane is positioned through the y-axis
 		 E: planex = 0; planey = -0.66;*/
-	
+
 	double	raydirx;
 	double	raydiry;
-	/*These are ray vectors which represent the 
+	/*These are ray vectors which represent the
 	direction of the vector*/
 
 	int		mapy;
@@ -115,17 +118,17 @@ typedef struct s_cub3d
 	/*Sets player position into int, later on will
 	  help to see if vertical or horizontal wall
 	  is hit and change the deltadistx or y!*/
-	
+
 	double	deltax;
 	double	deltay;
-	/*These are the distance the ray travels to 
+	/*These are the distance the ray travels to
 	   traverse 1 unit of each axis*/
 	double	step;
 	double	sidex;
 	double	sidey;
 	/*These are the distance to reach the first vertical
 	  or horizontal grid*/
-	
+
 	double	wall_dist;
 	double	hit_location;
 	double	texture_position;
@@ -151,6 +154,8 @@ typedef struct s_cub3d
 	char	*path_s;
 	char	*path_e;
 	char	*path_w;
+	void	*gun_text;
+	void	*fire_text;
 }				t_cub3d;
 
 typedef struct s_pars
@@ -183,10 +188,24 @@ void	free_pars(t_pars *pars);
 int		close_free(t_cub3d *cub3d);
 void	ft_init_window(t_cub3d *cub3d);
 void	my_mlx_pixel_put(t_textures *text, int x, int y, int color);
-int		ft_keypress(int	keycode, t_cub3d *cub3d);
+int		ft_keypress(int keycode, t_cub3d *cub3d);
 int		ft_keyrelease(int keycode, t_cub3d *cub3d);
 int		ft_render_next_frame_bymove(t_cub3d *cub3d);
 void	ft_mouse(t_cub3d *cub3d);
 void	ft_rot_movement(t_cub3d *cub3d, int i, double x);
+void	ft_gun(t_cub3d *cub3d);
+int		ft_mousepress(int mousecode, int x, int y, t_cub3d *cub3d);
+void	check_map(char **map);
+void	msg_exit(char *error);
+void	init_file_content(char **buff, char **file_content);
+void	init_pars_orientation(t_pars *pars, char **file_content, int i, int j);
+void	init_pars(t_pars *pars);
+void	init_rgb(t_pars *pars, char **tmp, int option, char **file_content);
+int		size_tab(char **tab);
+void	free_exit(t_pars *pars, char **file_content, char *error_msg, int op);
+void	free_tmp_exit(t_pars *pars, char **file, char *error_msg, char **t);
+int		check_duplicate(char **file_content, int i, t_pars *pars);
+int		good_size(char **buff);
+int		ft_handle_mouse_move(int x, int y, t_cub3d *cub3d);
 
 #endif
