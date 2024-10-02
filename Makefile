@@ -1,6 +1,6 @@
 NAME 		= cub3D
 CC 			= gcc
-CFLAGS 		= -Wall -Wextra -Werror
+CFLAGS 		= -Wall -Wextra -Werror -finline-functions -fvectorize -fslp-vectorize -ffast-math -falign-functions -funroll-loops -fstrict-aliasing -fomit-frame-pointer -flto -Ofast -O1 -O2 -Os -O3
 MLXFLAGS	= -L./minilibx -I./minilibx -lmlx -framework OpenGl -framework Appkit
 MLX_PATH	= ./minilibx
 
@@ -13,42 +13,50 @@ Y		= \033[33;6m
 W		= \033[37;6m
 O		= \033[38;2;255;165;0m
 
-SRC			= cub3d.c	\
-			  raycast.c	\
-			  mlx_init.c \
-			  parsing/flood_fill.c	\
-			  parsing/mainparsing.c	\
-			  parsing/ft_split.c	\
-			  parsing/utils.c	\
-			  parsing/utils2.c	\
-			  parsing/init_utils.c \
-			  parsing/init_utils2.c \
-			  parsing/GNL/get_next_line.c	\
-			  parsing/GNL/get_next_line_utils.c	\
-			  hook.c	\
-			  bonus_utils.c
+SRC			= ./src/cub3d.c	\
+               ./src/raycast.c	\
+               ./src/mlx_init.c \
+               ./src/parsing/flood_fill.c	\
+               ./src/parsing/mainparsing.c	\
+               ./src/parsing/ft_split.c	\
+               ./src/parsing/utils.c	\
+               ./src/parsing/utils2.c	\
+               ./src/parsing/init_utils.c \
+               ./src/parsing/init_utils2.c \
+               ./src/parsing/GNL/get_next_line.c	\
+               ./src/parsing/GNL/get_next_line_utils.c	\
+               ./src/hook.c	\
+               ./src/cub3d_utils.c	\
+               ./src/cub3d_utils2.c	\
+               ./src/bonus_minimap.c	\
+               ./src/bonus_mouse.c	\
+               ./src/dda.c	\
+               ./src/gun_utils.c	\
+               ./src/movement.c	\
+			   ./src/raycast_utils.c
 
-
-OBJ = $(SRC:.c=.o)
+OBJ = $(SRC:./src/%.c=./obj/%.o)
 
 all: cute ${NAME}
 
 ${NAME}: $(OBJ)
 		@$(MAKE)  -C $(MLX_PATH)
 		@echo "$(G)MINILIBX COMPILED!$(RS)"
-		@$(CC) $(CFLAGS) -lm $(SRC) $(MLXFLAGS) -o $(NAME)
+		@$(CC) $(CFLAGS) -lm $(OBJ) $(MLXFLAGS) -o $(NAME)
 		@echo "$(G)CUB3D CREATED!$(RS)"
 
-%.o: %.c
-	@${CC} ${CFLAGS} ${THREAD_FLG} -c $< -o $@
+./obj/%.o: ./src/%.c
+		@mkdir -p $(dir $@)
+		@${CC} ${CFLAGS} -c $< -o $@
 
 clean:
 		@rm -rf $(OBJ)
+		@rm -rf ./obj
 		$(MAKE) clean -C ./minilibx
 		@echo "OBJECT FILES $(R)DELETED$(RS)"
 
 fclean: clean
-		@rm -rf $(NAME) $(OBJ)
+		@rm -rf $(NAME) ./obj
 		@echo "CUB3D $(R)DELETED$(RS)"
 
 re: fclean all

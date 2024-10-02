@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   mainparsing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olmarech <olmarech@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abolor-e <abolor-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 12:39:43 by olmarech          #+#    #+#             */
-/*   Updated: 2024/09/26 16:19:42 by olmarech         ###   ########.fr       */
+/*   Updated: 2024/10/02 17:44:46 by abolor-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../../include/cub3d.h"
 
 void	parse_texture(t_pars *pars, char **file_content)
 {
@@ -64,31 +64,42 @@ void	parse_cf_rgb(t_pars *pars, char **file_content)
 	}
 }
 
-void	check_missing_info(t_pars *pars, char **file_content)
+void	check_missing_info(t_pars *pars)
 {
 	int	i;
 	int	j;
 
-	i = -1;
 	if (!pars->path_e || !pars->path_n
 		|| !pars->path_s || !pars->path_w
 		|| pars->c_rgb[0] == -1 || pars->f_rgb[0] == -1)
 		free_exit(pars, NULL, "Something went wrong.", 1);
-	while (file_content[++i])
+	i = -1;
+	while (pars->map[++i])
 	{
 		j = -1;
-		while (file_content[i][++j])
+		while (pars->map[i][++j])
 		{
-			if (!(file_content[i][j] == '0' || file_content[i][j] == '1'
-				|| file_content[i][j] == '2' || file_content[i][j] == 'W'
-				|| file_content[i][j] == 'E' || file_content[i][j] == 'S'
-				|| file_content[i][j] == 'N' || file_content[i][j] == ' '))
+			if (!(pars->map[i][j] == '0' || pars->map[i][j] == '1'
+				|| pars->map[i][j] == '2' || pars->map[i][j] == 'W' // what is 2
+				|| pars->map[i][j] == 'E' || pars->map[i][j] == 'S'
+				|| pars->map[i][j] == 'N' || pars->map[i][j] == ' '))
 				free_exit(pars, NULL, "Something went wrong.", 1);
-			if (file_content[i][j] == 'N' || file_content[i][j] == 'S'
-				|| file_content[i][j] == 'E' || file_content[i][j] == 'W')
-				init_pars_orientation(pars, file_content, i, j);
+			if (pars->map[i][j] == 'N' || pars->map[i][j] == 'S'
+				|| pars->map[i][j] == 'E' || pars->map[i][j] == 'W')
+				init_pars_orientation(pars, i, j);
 		}
 	}
+}
+
+void	init_map(char **file_content, t_pars *pars)
+{
+	int	i;
+
+	i = -1;
+	pars->map = malloc(sizeof(char *) * (size_tab(file_content) + 1));
+	while (file_content[++i])
+		pars->map[i] = ft_strdup(file_content[i]);
+	pars->map[i] = NULL;
 }
 
 void	init_pars_all(char **file_content, t_pars *pars, char **buff)
@@ -98,15 +109,13 @@ void	init_pars_all(char **file_content, t_pars *pars, char **buff)
 	i = -1;
 	init_file_content(buff, file_content);
 	free_tab(buff);
-	free(buff);
 	init_pars(pars);
 	parse_texture(pars, file_content);
 	parse_cf_rgb(pars, file_content);
-	pars->map = file_content + 6;
-	check_missing_info(pars, file_content + 6);
-	while (++i < 6)
-		free(file_content[i]);
-	flood_fill(pars->map);
+	init_map(file_content + 6, pars);
+	check_missing_info(pars);
+	free_tab(file_content);
+	flood_fill(pars);
 }
 
 void	parsing(t_pars *pars, char **av)
@@ -120,7 +129,8 @@ void	parsing(t_pars *pars, char **av)
 	fd = open(av[1], O_RDWR, 677);
 	if (fd == -1)
 		msg_exit("File info corrupted.");
-	buff = malloc(sizeof(char *) * 9999999999);
+	buff = NULL;
+	buff = malloc(sizeof(char *) * 1000);
 	while (1)
 	{
 		buff[i] = get_next_line(fd);
@@ -132,7 +142,6 @@ void	parsing(t_pars *pars, char **av)
 	if (!file_content)
 	{
 		free_tab(buff);
-		free(buff);
 		msg_exit("Cannot allocate.");
 	}
 	init_pars_all(file_content, pars, buff);

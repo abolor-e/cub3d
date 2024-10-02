@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olmarech <olmarech@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abolor-e <abolor-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 15:30:03 by olmarech          #+#    #+#             */
-/*   Updated: 2024/09/26 13:17:57 by olmarech         ###   ########.fr       */
+/*   Updated: 2024/10/02 17:23:56 by abolor-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../../include/cub3d.h"
 
 void	freemaloc(char **result, int delimiter)
 {

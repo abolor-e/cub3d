@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olmarech <olmarech@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abolor-e <abolor-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 15:57:37 by olmarech          #+#    #+#             */
-/*   Updated: 2024/09/26 15:58:33 by olmarech         ###   ########.fr       */
+/*   Updated: 2024/10/02 17:24:01 by abolor-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../../include/cub3d.h"
 
 void	check_tmp(char **tmp, t_pars *pars, char **file_content)
 {
@@ -40,7 +40,6 @@ void	init_rgb(t_pars *pars, char **tmp, int option, char **file_content)
 		pars->f_rgb[1] = ft_atoi(tmp[1]);
 		pars->f_rgb[2] = ft_atoi(tmp[2]);
 		free_tab(tmp);
-		free(tmp);
 	}
 	else
 	{
@@ -49,6 +48,5 @@ void	init_rgb(t_pars *pars, char **tmp, int option, char **file_content)
 		pars->c_rgb[1] = ft_atoi(tmp[1]);
 		pars->c_rgb[2] = ft_atoi(tmp[2]);
 		free_tab(tmp);
-		free(tmp);
 	}
 }

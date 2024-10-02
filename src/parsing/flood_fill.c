@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   flood_fill.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olmarech <olmarech@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abolor-e <abolor-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 12:39:36 by olmarech          #+#    #+#             */
-/*   Updated: 2024/09/26 13:16:33 by olmarech         ###   ########.fr       */
+/*   Updated: 2024/10/02 17:23:54 by abolor-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../../include/cub3d.h"
 
 void	print_content(char **file_content)
 {
@@ -75,36 +75,37 @@ void	verify_map(char **map, int y, int x)
 	}
 }
 
-void	pars_map(char **map)
+void	pars_map(t_pars *pars)
 {
 	int	i;
 	int	j;
 	int	width;
 	int	height;
-	int	tmp;
 
 	height = 0;
 	width = 0;
 	i = -1;
-	while (map[height])
+	while (pars->map[height])
 		height++;
-	while (map[++i])
+	while (pars->map[++i])
 	{
 		j = 0;
-		tmp = 0;
-		while (map[i][j])
+		while (pars->map[i][j])
 			j++;
 		if (j > width)
-			width = tmp;
+			width = j;
 	}
-	verify_map(map, height, width);
+	verify_map(pars->map, height, width);
+	printf("h : %d, w : %d\n\n\n", height, width);
+	pars->map_w = width;
+	pars->map_h = height;
 }
 
-void	flood_fill(char **map)
+void	flood_fill(t_pars *pars)
 {
-	if (!map[0])
+	if (!pars->map[0])
 		msg_exit("There is no map.");
-	pars_map(map);
-	print_content(map);
-	check_map(map);
+	pars_map(pars);
+	print_content(pars->map);
+	check_map(pars->map);
 }
